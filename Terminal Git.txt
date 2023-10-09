@@ -1,0 +1,7 @@
+> sudo apt install git
+> git --version
+
+> git config --global user.name "Waldemar"
+> git congig --global user.email "dnestrgroup@gmail.com"
+
+

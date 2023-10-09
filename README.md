@@ -1,1 +1,1 @@
-# django0910
+small test project v0910

@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+ <title> Home Page Django </title>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta http-equiv="Content-Language" content="ru" />
+   		
+   		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   			
+   			<meta name="keywords" content="developer blog">
+   			<meta name="description" content="developer blog">
+
+     			<link rel="stylesheet" type="text/css" href="style-index-body.css" />
+
+</head>
+<body>
+    <div class="content">
+        <h1>Home Page</h1>
+    </div>
+
+    {% for item in posts %}
+        <div>
+            <h3>{{ item.title }}</h3>
+            <div>
+                <img src="{{ item.photo.url }}" width="150" height="150" alt="{{ item.title }}">
+                {{ item.content }}
+            </div>
+            <p>{{ item.created_at|date:"d.m.Y" }}</p>
+        </div>
+    {% endfor %}
+
+</body>
+</html>

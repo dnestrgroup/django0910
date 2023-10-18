@@ -1,7 +1,10 @@
 from django.shortcuts import render
 
+# Libraries for simple page render
 from django.http import HttpResponse
 from .models import Article
+
+from rest_framework import generics
 
 # Create your views here.
 def home(request):
@@ -20,3 +23,8 @@ def home(request):
 
 def test_page(request):
     return HttpResponse('<h1>Test Page</h1>')
+
+
+class ArticleList(generics.ListAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer

@@ -18,9 +18,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from my_blog.views import ArticleAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/articleslist/', ArticleAPIView.as_view()),
     path('', include('my_blog.urls'))
 ]
 

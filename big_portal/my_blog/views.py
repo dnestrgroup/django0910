@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.forms import model_to_dict
 
 # Libraries for simple page render
 from django.http import HttpResponse
@@ -43,10 +44,21 @@ def test_page(request):
 # the class Response transform data to JSON
 class ArticleAPIView(APIView):
     def get(self, request):
-        # posts = Article.objects.all()
-        # serializer = ArticleSerializer(posts, many=True)
-        # return Response(serializer.data)
-        return Response({'title': 'House model11'})
+        # Simple response
+        # return Response({'title': 'House model11'})
+        
+        # from DB response
+        lst = Article.objects.all().values()
+        return Response({'posts:': list(lst)})
     
     def post(self, request):
-        return Response({'title': 'House model22'})
+        # Simple response via POST-request
+        # return Response({'title': 'House model22'})
+        
+        # This method adds new row to DB
+        post_new = Article.objects.create(
+            title=request.data['title'],
+            content=request.data['content'],
+            photo=request.data['photo'],
+        )
+        return Response({'post': model_to_dict(post_new)})

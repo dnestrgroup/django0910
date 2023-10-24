@@ -48,17 +48,22 @@ class ArticleAPIView(APIView):
         # return Response({'title': 'House model11'})
         
         # from DB response
+        # 1. Get list of objects
+        # 2. Transform it to JSON (via serializer)
         lst = Article.objects.all().values()
-        return Response({'posts:': list(lst)})
+        return Response({'posts:': ArticleSerializer(lst, many=True).data})
     
     def post(self, request):
         # Simple response via POST-request
         # return Response({'title': 'House model22'})
         
         # This method adds new row to DB
+        serializer = ArticleSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
         post_new = Article.objects.create(
             title=request.data['title'],
             content=request.data['content'],
             photo=request.data['photo'],
         )
-        return Response({'post': model_to_dict(post_new)})
+        return Response({'post': ArticleSerializer(post_new).data})

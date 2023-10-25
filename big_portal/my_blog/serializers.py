@@ -10,22 +10,30 @@ from .models import Article
 #         model = Article
 #         fields = '__all__'
 
-class ArticleSerializer(serializers.Serializer):
-    title = serializers.CharField(max_length=255)
-    content = serializers.CharField()
-    created_at = serializers.DateTimeField(read_only=True)
-    photo = serializers.CharField()
+# Serializer that work with API
+# Our class Serializer needs detail description of all fields
+# class ArticleSerializer(serializers.Serializer):
+#     title = serializers.CharField(max_length=255)
+#     content = serializers.CharField()
+#     created_at = serializers.DateTimeField(read_only=True)
+#     photo = serializers.CharField()
 
-    def create(self, validated_data):
-        return Article.objects.create(**validated_data)
+#     def create(self, validated_data):
+#         return Article.objects.create(**validated_data)
 
-    def update(self, instance, validated_data):
-        instance.title = validated_data.get('title', instance.title)
-        instance.content = validated_data.get('content', instance.content)
-        instance.created_at = validated_data.get('created_at', instance.created_at)
-        instance.photo = validated_data.get('photo', instance.photo)
-        instance.save()
-        return instance
+#     def update(self, instance, validated_data):
+#         instance.title = validated_data.get('title', instance.title)
+#         instance.content = validated_data.get('content', instance.content)
+#         instance.created_at = validated_data.get('created_at', instance.created_at)
+#         instance.photo = validated_data.get('photo', instance.photo)
+#         instance.save()
+#         return instance
 
-    def delete(self, instance):
-        instance.delete()
+#     def delete(self, instance):
+#         instance.delete()
+
+class ArticleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+        # fields = '__all__'
+        fields = ('title', 'content', 'created_at', 'photo')

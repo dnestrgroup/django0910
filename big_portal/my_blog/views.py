@@ -93,3 +93,8 @@ class ArticleAPIView(APIView):
         instance.delete()
         
         return Response({'message': 'Статья успешно удалена'})
+
+
+class ArticleAPIList(generics.ListCreateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer

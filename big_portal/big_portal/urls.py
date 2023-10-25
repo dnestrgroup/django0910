@@ -19,12 +19,20 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from my_blog.views import ArticleAPIView
+from my_blog.views import ArticleAPIList
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('api/v1/articleslist/', ArticleAPIView.as_view()),
+#     path('api/v1/articleslist/<int:pk>/', ArticleAPIView.as_view()),
+#     path('api/v1/articleslist/delete/<int:pk>/', ArticleAPIView.as_view()),
+#     path('', include('my_blog.urls'))
+# ]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/articleslist/', ArticleAPIView.as_view()),
-    path('api/v1/articleslist/<int:pk>/', ArticleAPIView.as_view()),
-    path('api/v1/articleslist/delete/<int:pk>/', ArticleAPIView.as_view()),
+    path('api/v1/articleslist/', ArticleAPIList.as_view()),
+    path('api/v1/articleslist/<int:pk>/', ArticleAPIList.as_view()),
     path('', include('my_blog.urls'))
 ]
 

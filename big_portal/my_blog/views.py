@@ -60,10 +60,36 @@ class ArticleAPIView(APIView):
         # This method adds new row to DB
         serializer = ArticleSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'post': serializer.data})
+    
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response({'error': 'Method PUT not allowed'})
+        
+        try:
+            instance = Article.objects.get(pk=pk)
+        except:
+            return Response({'error': 'Object does not exist'})
+        
+        serializer = ArticleSerializer(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'post': serializer.data})
 
-        post_new = Article.objects.create(
-            title=request.data['title'],
-            content=request.data['content'],
-            photo=request.data['photo'],
-        )
-        return Response({'post': ArticleSerializer(post_new).data})
+    def delete(self, request, *args, **kwargs):
+        # Получаем объект статьи на основе предоставленного первичного ключа
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response({'error': 'Метод DELETE не разрешен'})
+        
+        try:
+            instance = Article.objects.get(pk=pk)
+        except:
+            return Response({'error': 'Объект не существует'})
+        
+        # Удаляем объект статьи
+        instance.delete()
+        
+        return Response({'message': 'Статья успешно удалена'})

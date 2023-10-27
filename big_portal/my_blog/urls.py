@@ -17,9 +17,10 @@ from django.contrib import admin
 from django.urls import path
 
 from .views import home, test_page
+
 # We import function home - from file my_blog/views.py
 
 urlpatterns = [
-    path('', home),
-    path('test/', test_page),
+    path("", home),
+    path("test/", test_page),
 ]

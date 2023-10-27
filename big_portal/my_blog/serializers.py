@@ -32,8 +32,9 @@ from .models import Article
 #     def delete(self, instance):
 #         instance.delete()
 
+
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         # fields = '__all__'
-        fields = ('title', 'content', 'created_at', 'photo')
+        fields = ("title", "content", "created_at", "photo")

@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from my_blog.views import ArticleAPIView
 from my_blog.views import ArticleAPIList
 
+
 # urlpatterns = [
 #     path('admin/', admin.site.urls),
 #     path('api/v1/articleslist/', ArticleAPIView.as_view()),
@@ -29,11 +30,18 @@ from my_blog.views import ArticleAPIList
 #     path('', include('my_blog.urls'))
 # ]
 
+from rest_framework_swagger.views import get_swagger_view
+
+
+schema_view = get_swagger_view(title="Pastebin API")
+
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/v1/articleslist/', ArticleAPIList.as_view()),
-    path('api/v1/articleslist/<int:pk>/', ArticleAPIList.as_view()),
-    path('', include('my_blog.urls'))
+    # path("api/v1/docs/", schema_view),
+    path("admin/", admin.site.urls),
+    path("api/v1/articleslist/", ArticleAPIList.as_view()),
+    path("api/v1/articleslist/<int:pk>/", ArticleAPIList.as_view()),
+    path("", include("my_blog.urls")),
 ]
 
 if settings.DEBUG:

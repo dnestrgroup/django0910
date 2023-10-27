@@ -13,9 +13,10 @@ from .serializers import ArticleSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+
 # Create your views here.
 def home(request):
-    #return HttpResponse('<h1>Home Page</h1>')
+    # return HttpResponse('<h1>Home Page</h1>')
     # I variant
     # posts = Article.objects.all()
     # res = '<h1> Articles list: </h1>'
@@ -25,12 +26,12 @@ def home(request):
 
     # II variant
     # posts = Article.objects.all()
-    posts = Article.objects.order_by('-created_at')
-    return render(request, 'my_blog/home.html', {'posts': posts})
+    posts = Article.objects.order_by("-created_at")
+    return render(request, "my_blog/home.html", {"posts": posts})
+
 
 def test_page(request):
-    return HttpResponse('<h1>Test Page</h1>')
-
+    return HttpResponse("<h1>Test Page</h1>")
 
 
 # The 1-st view for REST-framework
@@ -39,6 +40,7 @@ def test_page(request):
 #     queryset = Article.objects.all()
 #     serializer_class = ArticleSerializer
 
+
 # The 2-nd view for REST-framework
 # simple class to work with GET and POST requests
 # the class Response transform data to JSON
@@ -46,53 +48,53 @@ class ArticleAPIView(APIView):
     def get(self, request):
         # Simple response
         # return Response({'title': 'House model11'})
-        
+
         # from DB response
         # 1. Get list of objects
         # 2. Transform it to JSON (via serializer)
         lst = Article.objects.all().values()
-        return Response({'posts:': ArticleSerializer(lst, many=True).data})
-    
+        return Response({"posts:": ArticleSerializer(lst, many=True).data})
+
     def post(self, request):
         # Simple response via POST-request
         # return Response({'title': 'House model22'})
-        
+
         # This method adds new row to DB
         serializer = ArticleSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({'post': serializer.data})
-    
+        return Response({"post": serializer.data})
+
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get('pk', None)
+        pk = kwargs.get("pk", None)
         if not pk:
-            return Response({'error': 'Method PUT not allowed'})
-        
+            return Response({"error": "Method PUT not allowed"})
+
         try:
             instance = Article.objects.get(pk=pk)
         except:
-            return Response({'error': 'Object does not exist'})
-        
+            return Response({"error": "Object does not exist"})
+
         serializer = ArticleSerializer(data=request.data, instance=instance)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({'post': serializer.data})
+        return Response({"post": serializer.data})
 
     def delete(self, request, *args, **kwargs):
         # Получаем объект статьи на основе предоставленного первичного ключа
-        pk = kwargs.get('pk', None)
+        pk = kwargs.get("pk", None)
         if not pk:
-            return Response({'error': 'Метод DELETE не разрешен'})
-        
+            return Response({"error": "Метод DELETE не разрешен"})
+
         try:
             instance = Article.objects.get(pk=pk)
         except:
-            return Response({'error': 'Объект не существует'})
-        
+            return Response({"error": "Объект не существует"})
+
         # Удаляем объект статьи
         instance.delete()
-        
-        return Response({'message': 'Статья успешно удалена'})
+
+        return Response({"message": "Статья успешно удалена"})
 
 
 class ArticleAPIList(generics.ListCreateAPIView):

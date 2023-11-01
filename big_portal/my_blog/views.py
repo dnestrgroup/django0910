@@ -100,3 +100,36 @@ class ArticleAPIView(APIView):
 class ArticleAPIList(generics.ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+
+    from rest_framework import generics
+
+
+from rest_framework.response import Response
+from rest_framework import status
+
+
+class ArticleAPIList(generics.ListCreateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+
+    def delete(self, request, *args, **kwargs):
+        # Получите первичный ключ статьи для удаления
+        pk = kwargs.get("pk", None)
+        if not pk:
+            return Response(
+                {"error": "Первичный ключ не указан"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            # Получите объект статьи на основе первичного ключа
+            article = Article.objects.get(pk=pk)
+            # Удалите объект статьи
+            article.delete()
+            return Response(
+                {"message": "Статья удалена успешно"}, status=status.HTTP_204_NO_CONTENT
+            )
+        except Article.DoesNotExist:
+            return Response(
+                {"error": "Статья не найдена"}, status=status.HTTP_404_NOT_FOUND
+            )

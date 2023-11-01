@@ -53,6 +53,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/articleslist/", ArticleAPIList.as_view()),
     path("api/v1/articleslist/<int:pk>/", ArticleAPIList.as_view()),
+    path("api/v1/articleslist/delete/<int:pk>/", ArticleAPIList.as_view()),
     path("", include("my_blog.urls")),
     path(
         "swagger/",

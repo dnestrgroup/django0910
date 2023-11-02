@@ -18,8 +18,9 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from my_blog.views import ArticleAPIView
+# from my_blog.views import ArticleAPIView
 from my_blog.views import ArticleAPIList
+from my_blog.views import ArticleAPIUpdate
 
 
 from rest_framework import permissions
@@ -52,7 +53,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/articleslist/", ArticleAPIList.as_view()),
-    path("api/v1/articleslist/<int:pk>/", ArticleAPIList.as_view()),
+    path("api/v1/articleslist/<int:pk>/", ArticleAPIUpdate.as_view()),
     path("api/v1/articleslist/delete/<int:pk>/", ArticleAPIList.as_view()),
     path("", include("my_blog.urls")),
     path(

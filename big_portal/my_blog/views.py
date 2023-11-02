@@ -13,6 +13,8 @@ from .serializers import ArticleSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from rest_framework import status
+
 
 # Create your views here.
 def home(request):
@@ -42,94 +44,59 @@ def test_page(request):
 
 
 # The 2-nd view for REST-framework
-# simple class to work with GET and POST requests
+# simple class to work with requests
+# Here we will realize GET, POST, PUT, DELETE
 # the class Response transform data to JSON
-class ArticleAPIView(APIView):
-    def get(self, request):
-        # Simple response
-        # return Response({'title': 'House model11'})
+# class ArticleAPIView(APIView):
+#     def get(self, request):
+#         lst = Article.objects.all().values()
+#         return Response({"posts:": ArticleSerializer(lst, many=True).data})
 
-        # from DB response
-        # 1. Get list of objects
-        # 2. Transform it to JSON (via serializer)
-        lst = Article.objects.all().values()
-        return Response({"posts:": ArticleSerializer(lst, many=True).data})
+#     def post(self, request):
+#         serializer = ArticleSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({"post": serializer.data})
 
-    def post(self, request):
-        # Simple response via POST-request
-        # return Response({'title': 'House model22'})
+#     def put(self, request, *args, **kwargs):
+#         pk = kwargs.get("pk", None)
+#         if not pk:
+#             return Response({"error": "Method PUT not allowed"})
 
-        # This method adds new row to DB
-        serializer = ArticleSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({"post": serializer.data})
+#         try:
+#             instance = Article.objects.get(pk=pk)
+#         except:
+#             return Response({"error": "Object does not exist"})
 
-    def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Method PUT not allowed"})
+#         serializer = ArticleSerializer(data=request.data, instance=instance)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({"post": serializer.data})
 
-        try:
-            instance = Article.objects.get(pk=pk)
-        except:
-            return Response({"error": "Object does not exist"})
+#     def delete(self, request, *args, **kwargs):
+#         # Получаем объект статьи на основе предоставленного первичного ключа
+#         pk = kwargs.get("pk", None)
+#         if not pk:
+#             return Response({"error": "Метод DELETE не разрешен"})
 
-        serializer = ArticleSerializer(data=request.data, instance=instance)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({"post": serializer.data})
+#         try:
+#             instance = Article.objects.get(pk=pk)
+#         except:
+#             return Response({"error": "Объект не существует"})
 
-    def delete(self, request, *args, **kwargs):
-        # Получаем объект статьи на основе предоставленного первичного ключа
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Метод DELETE не разрешен"})
-
-        try:
-            instance = Article.objects.get(pk=pk)
-        except:
-            return Response({"error": "Объект не существует"})
-
-        # Удаляем объект статьи
-        instance.delete()
-
-        return Response({"message": "Статья успешно удалена"})
+#         instance.delete()
+#         return Response({"message": "Статья успешно удалена"})
 
 
+# The 3-rd view for REST-framework
+# 1) ListCreateAPIView - supports GET and POST
+# 2) UpdateAPIView - supports PUT
+# 3) RetrieveUpdateDestroyAPIView - supports GET, PUT, DELETE
 class ArticleAPIList(generics.ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
-    from rest_framework import generics
 
-
-from rest_framework.response import Response
-from rest_framework import status
-
-
-class ArticleAPIList(generics.ListCreateAPIView):
+class ArticleAPIUpdate(generics.UpdateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-
-    def delete(self, request, *args, **kwargs):
-        # Получите первичный ключ статьи для удаления
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response(
-                {"error": "Первичный ключ не указан"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        try:
-            # Получите объект статьи на основе первичного ключа
-            article = Article.objects.get(pk=pk)
-            # Удалите объект статьи
-            article.delete()
-            return Response(
-                {"message": "Статья удалена успешно"}, status=status.HTTP_204_NO_CONTENT
-            )
-        except Article.DoesNotExist:
-            return Response(
-                {"error": "Статья не найдена"}, status=status.HTTP_404_NOT_FOUND
-            )

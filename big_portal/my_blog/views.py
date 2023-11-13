@@ -90,7 +90,7 @@ def test_page(request):
 
 # The 3-rd view for REST-framework
 # 1) ListCreateAPIView - supports GET and POST
-# 2) UpdateAPIView - supports PUT
+# 2) UpdateAPIView - supports PUT and PATCH
 # 3) RetrieveUpdateDestroyAPIView - supports GET, PUT, DELETE
 class ArticleAPIList(generics.ListCreateAPIView):
     queryset = Article.objects.all()
@@ -100,3 +100,9 @@ class ArticleAPIList(generics.ListCreateAPIView):
 class ArticleAPIUpdate(generics.UpdateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+
+
+class ArticleAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+
